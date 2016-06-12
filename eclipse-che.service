@@ -1,0 +1,12 @@
+[Unit]
+Description=Eclipse che web IDE
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/conf.d/eclipse-che
+ExecStart=/usr/share/eclipse-che/bin/che.sh -r:${CHE_IP} -p:${CHE_PORT}
+User=eclipse-che
+
+[Install]
+WantedBy=multi-user.target
+
