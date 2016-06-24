@@ -11,3 +11,11 @@ This is work in progress.
 * Some (but not yet all) userdata go to /var/lib/eclipse-che.
 
 IP-Address and Port can be configured in /etc/conf.d/eclipse-che
+
+As previous versions did not work with current Archlinux systems, this build uses a SNAPSHOT build directly from Jenkins. Therefor it will be necessary to change the download link in the PKGBUILD to a currently available version.
+
+For more information have a look here:
+
+https://github.com/eclipse/che/issues/745
+
+https://github.com/eclipse/che/pull/1550
