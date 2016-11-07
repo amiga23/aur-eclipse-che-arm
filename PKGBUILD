@@ -3,16 +3,17 @@
 # Repository: https://github.com/amiga23/aur-eclipse-che-arm
 
 pkgname=eclipse-che-arm
-pkgver=4.4.0.RC1
-pkgrel=2
+pkgver=4.7.2
+pkgrel=1
 epoch=
 pkgdesc="Open Source Platform for Cloud Based Development"
+#arch=('armv7h' 'aarch64')
 arch=('armv7h')
 url="http://www.eclipse.org/che"
 license=('EPL')
 groups=()
 depends=(java-runtime docker)
-makedepends=()
+#makedepends=(go)
 checkdepends=()
 optdepends=()
 provides=(eclipse-che)
@@ -22,18 +23,27 @@ backup=('etc/conf.d/eclipse-che')
 options=()
 install=install
 changelog=changelog
-source=('https://maven.codenvycorp.com/content/repositories/codenvy-public-snapshots/org/eclipse/che/assembly-main/4.4.0-RC1-SNAPSHOT/assembly-main-4.4.0-RC1-20160624.160116-39.tar.gz'
+source=("http://mirror.switch.ch/eclipse/che/eclipse-che-$pkgver.tar.gz"
         'sysuser.conf'
 	'eclipse-che.conf'
 	'eclipse-che.service')
 noextract=()
-sha256sums=('SKIP'
+sha256sums=('2f85571929ebede0525fea15bcb8ebf4b1dcfd01cbccf86a81bd00d2668df91b'
             '519d891d5ff5abe85c9fedffa6af75571ed1b0e382b0b6a8b8d1b2de79b95e0e'
 	    'c45e83a67c662479f54d40dcd1b16990073eab7e4e0da048b742429a8789c04c'
-	    'e35b626413385856a33f59da6d65e0ce22c1d207e193fdc7fc79f98ce10d99d7')
+	    '1b189f593f10bb4961536d08dfd6b48598e4ff708214b36a9213f1709bd36a66')
 package() {
+#  mkdir codenvy
+#  cd codenvy
+#  export GOPATH=$srcdir/codenvy
+#  go get github.com/gorilla/websocket
+#  go get github.com/codenvy/pty
+#  git clone https://github.com/codenvy/websocket-terminal.git
+#  cd websocket-terminal
+#  go build
+
   #modify repository for arm docker images
-  cd eclipse-che*
+  cd $srcdir/eclipse-che*
   sed -i 's/codenvy\/ubuntu_jdk8/kartben\/armhf-che-jdk8/g' stacks/stacks.json
   sed -i 's/codenvy\/node/kartben\/armhf-che-node/g' stacks/stacks.json
   # Increase timeout
@@ -43,7 +53,7 @@ package() {
   sed -i 's+che.conf.storage=${catalina.base}/temp/local-storage+che.conf.storage=/var/lib/eclipse-che/temp/local-storage+g' conf/che.properties
   #install
   mkdir -p $pkgdir/usr/share
-  mv $srcdir/eclipse-che-4.4.0-RC1-SNAPSHOT $pkgdir/usr/share/eclipse-che
+  mv $srcdir/eclipse-che-$pkgver $pkgdir/usr/share/eclipse-che
 
   # setup eclipse-che home
   install -m 755 -d $pkgdir/var/lib/eclipse-che
